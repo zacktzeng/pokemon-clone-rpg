@@ -9,6 +9,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _solidObjectLayerMask;
     [SerializeField] private LayerMask _longGrassLayerMask;
 
+    [SerializeField] private Animator _ac;
+    [SerializeField] private string _acParamIsMovingName = "isMoving";
+    [SerializeField] private string _acParamMoveXName = "moveX";
+    [SerializeField] private string _acParamMoveYName = "moveY";
+
     private PlayerInputHandler _playerInputHandler;
 
     private bool isMoving;
@@ -40,15 +45,24 @@ public class PlayerController : MonoBehaviour
                     moveInputY = 0;
                     moveInputX = moveInputX > 0 ? 1 : -1;
                 }
+                
+                _ac.SetFloat(_acParamMoveXName, moveInputX);
+                _ac.SetFloat(_acParamMoveYName, moveInputY);
 
                 targetPosition.x += moveInputX;
                 targetPosition.y += moveInputY;
+
 
                 if (IsTargetPositionWalkable(targetPosition))
                 {
                     StartCoroutine(DiscreteMoveTransition(targetPosition));
                 }
             }
+            _ac.SetBool(_acParamIsMovingName, true);
+        }
+        else
+        {
+            _ac.SetBool(_acParamIsMovingName, false);
         }
     }
 
