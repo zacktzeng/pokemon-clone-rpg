@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed;
 
     [SerializeField] private LayerMask _solidObjectLayerMask;
+    [SerializeField] private LayerMask _longGrassLayerMask;
 
     private PlayerInputHandler _playerInputHandler;
 
@@ -66,7 +67,14 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
+        // Make sure that at the end of the coroutine movement transition,
+        // player position is actually on the target position. It's important because
+        // the while loop stops when it's Mathf.Epsilon apart.
+        transform.position = pTargetPosition;
+
         isMoving = false;
+
+        CheckEncounter();
     }
 
     private bool IsTargetPositionWalkable(Vector3 pTargetPosition)
@@ -76,7 +84,27 @@ public class PlayerController : MonoBehaviour
         {
             return false;
         }
-
         return true;
+    }
+
+    private bool IsPlayerOnLongGrass()
+    {
+        Vector2 playerPosition2D = new(transform.position.x, transform.position.y);
+        if (Physics2D.OverlapCircle(playerPosition2D, 0.1f, _longGrassLayerMask) != null)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private void CheckEncounter()
+    {
+        if (IsPlayerOnLongGrass())
+        {
+            if (Random.Range(1, 101) <= 10)
+            {
+                Debug.Log("Encounter a wild pokemon");
+            }
+        }
     }
 }
