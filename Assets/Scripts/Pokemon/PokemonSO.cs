@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +8,7 @@ using UnityEngine;
 /// max HP, attack, defense, special attack, special defense, and speed.
 /// These fields will be exposed via properties.
 /// </summary>
-[CreateAssetMenu(fileName = "New Pokemon SO", menuName = "Pokemon SO")]
+[CreateAssetMenu(fileName = "New Pokemon SO", menuName = "Scriptable Objects/Pokemon SO")]
 public class PokemonSO : ScriptableObject
 {
     [SerializeField] private string _name;
@@ -22,7 +23,7 @@ public class PokemonSO : ScriptableObject
     [SerializeField] private int _spAttack;
     [SerializeField] private int _spDefense;
     [SerializeField] private int _speed;
-
+    [SerializeField] private List<LearnableMove> _learnableMoves;
     public string Name { get { return _name; } }
     public string Description { get { return _description; } }
     public Sprite FrontSprite { get { return _frontSprite; } }
@@ -35,6 +36,22 @@ public class PokemonSO : ScriptableObject
     public int SpAttack { get { return _spAttack; } }
     public int SpDefense { get { return _spDefense; } }
     public int Speed { get { return _speed; } }
+    public List<LearnableMove> LearnableMoves { get { return _learnableMoves; } }
+
+}
+
+/// <summary>
+/// LearnableMove specify at what level a Pokemon learns which move.
+/// It is a combination of int level and MoveSO.
+/// This should be accessible in the inspector.
+/// </summary>
+[System.Serializable]
+public class LearnableMove
+{
+    [SerializeField] private int _level;
+    [SerializeField] private MoveSO _moveSO;
+    public int Level { get { return _level; } }
+    public MoveSO MoveSO { get { return _moveSO; } }
 }
 
 /// <summary>
